@@ -1,0 +1,44 @@
+Create Or Replace view VW_ALL_POSTS As
+Select r.ID, p.ID as PostID, UserName, FirstName, LastName, Gender, State, BirthYear, Category, Title, Description, PostDate, ExpireAfter
+From UserRegistration as r, POST as p
+Where r.ID = p.UserID;
+
+Drop procedure if exists SP_INSERT_USER;
+Create Procedure SP_INSERT_USER(IN uname VARCHAR(50), IN pwd VARCHAR(60), IN salt CHAR(21), IN fn VARCHAR(50), IN ln VARCHAR(50), IN gender VARCHAR(5), IN state VARCHAR(20), IN byear CHAR(4))
+insert into UserRegistration values (null, uname, pwd, salt, fn, ln, gender, state, byear);
+
+
+Drop procedure if exists SP_COUNT_USER;
+
+
+
+procedure sp_count_test(IN uname varchar(100), IN pwd varchar(100) )
+select count(*) as c from UserRegistration where Username = uname and Password = pwd
+
+Drop procedure if exists SP_FIND_USER_ID;
+Create Procedure SP_FIND_USER_ID(IN uname VARCHAR(50), IN pwd VARCHAR(60), OUT UID INT)
+Select ID into UID from UserRegistration where username = uname and password = pwd;
+
+Create Or Replace view VW_ALL_POSTS_WITH_PIC As
+Select r.ID as UserID, UserName, FirstName, LastName, Gender, State, BirthYear, PostID, Category, Title, Description, PostDate, ExpireAfter, l.ID as PicID, PicLink
+From UserRegistration as r, POST as p, POST_PIC as l
+Where r.ID = p.UserID and p.ID = l.PostID
+
+
+Drop procedure if exists SP_GET_POSTS_BY_EMAIL;
+Create Procedure SP_GET_POSTS_BY_EMAIL (IN uname VARCHAR(50)) 
+select Category, Title, Description, PostDate, PostID  from VW_ALL_POSTS where UserName = uname;
+
+Create Procedure Update_Password1(IN uname VARCHAR(50), IN newPwd VARCHAR(60))
+UPDATE UserRegistration
+SET Password = newPwd WHERE UserName = uname
+
+
+Create Procedure Update_Activate(IN uname VARCHAR(50))
+UPDATE UserRegistration
+SET UserActivated = "Yes" WHERE UserName = uname
+
+Create Procedure Get_Countries()
+select * from Country
+
+
