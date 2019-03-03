@@ -1,0 +1,14 @@
+<?php
+
+//
+
+//retreives 30 digit random number
+$code = $_GET['a'];
+
+//must use GET request because $code is sent through link
+
+if ($code!=''){
+		//check if code is in right format
+			}
+			
+			?>
